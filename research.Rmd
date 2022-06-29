@@ -1,0 +1,52 @@
+---
+title: "Research"
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+data(x){DRIVEN} works on biomedical data science in a generalist way. It is a collaborative environment where data science methodologies are applied to solve biomedical questions and perform research.
+
+## Data reuse and scientific reproducibility
+
+Part of Abel's research activities focus on data use and resuse at the intersection between neurotrauma research and data science. He applies, explores and develops data science methods in traumatic injuries affecting the brain and the spinal cord to increase reproducibility, accelerate translation and understand data reuse.
+
+## Applied unsupervised learning for data discovery.
+
+We develop and apply data science methods and tools, such as unsupervised and representation learning for data-driven discovery. An explanation of unobserved heterogeneity and extraction of latent spaces can then be used to gain understanding of data. These methods include principal component analysis and related matrix factorization methods, clustering, and trajectory analysis, among others.
+
+## Open and FAIR data sharing
+
+Abel is involved in several open and FAIR (Findable, Accessible, Interoperable and Reusable) data sharing projects and initiatives.
+
+### Open Data Commons
+
+The Open Data Commons (ODC) are community-based data repositories for spinal cord injury (ODC-SCI) and traumatic brain injury (ODC-TBI) research. The mission of the ODCs is to advance SCI and TBI research by promoting FAIR, data sharing, transparency and collaboration.
+
+**For Spinal Cord Injury**: [odc-sci.org](https://odc-sci.org/)
+
+**For Traumatic Brain Injury**: [odc-tbi.org](https://odc-tbi.org/)
+
+## Big-data Clinical studies
+
+Abel is part of the data team for clinical studies with a focus on big and detailed data collection.
+
+### Neurotrauma
+
+[TRACK-TBI: Transforming Research and Clinical Knowledge for Traumatic Brain Injuy](https://tracktbi.ucsf.edu/) at UCSF
+
+[TRACK-SCI: Transforming Research and Clinical Knowledge for Spinal Cord Injury TRACK-SCI](https://spinalcordinjury.ucsf.edu/) at UCSF
+
+### Chronic Low Back Pain
+
+[REACH: Core Center for Patient-centric, Mechanistic Phenotyping in Chronic Low Back Pain](https://comeback.ucsf.edu/research) at UCSF
+
+## Better tools for Better research
+
+We develop software and hardware oriented to automate research and perform better experiments. Check the tools section!
+

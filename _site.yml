@@ -1,5 +1,5 @@
 name: "distill_blog"
-title: "Abel Torres Espín"
+title: "data(x){DRIVEN}"
 description: |
   My Blog
 output_dir: "_site"
@@ -7,14 +7,20 @@ navbar:
   right:
     - text: "Home"
       href: index.html
+    - text: "Research"
+      href: research.html
+    - text: "People"
+      href: about.html
+    - text: "Publications"
+      href: publications.html
+    - text: "Co-authors"
+      href: co-authors.html
+    - text: "Tools"
+      href: Tools.html
+    - text: "Pre-print and Data"
+      href: preprintData.html
     - text: "Blog"
       href: blog.html
-    - text: "Research"
-      href: publications.html
-    # - text: "Software"
-    #   href: software.html
-    - text: "About"
-      href: about.html
     - icon: fab fa-github
       href: https://github.com/ATEspin
     - icon: ai ai-google-scholar

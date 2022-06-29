@@ -1,0 +1,37 @@
+---
+title: "Other Publications and Data"
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Pre-Prints
+
+* Austin C Chou, Abel Torres-Espin, J Russell Huie, Karen Krukowski, Sangmi Lee, Amber Nolan, Caroline Guglielmetti, Bridget E Hawkins, Myriam M Chaumeil, Geoffrey T Manley, Michael S Beattie, Jacqueline C Bresnahan, Maryann E Martone, Jeffrey S Grethe, Susanna Rosi, Adam R Ferguson (2021). Open Data Commons for Preclinical Traumatic Brain Injury Research: Empowering Data Sharing and Big Data Analytics. [doi.org/10.1101/2021.03.15.435178](https://doi.org/10.1101/2021.03.15.435178) 
+
+* Alan D Kaplan, Qi Cheng, K Aditya Mohan, Lindsay D Nelson, Sonia Jain, Harvey Levin, Abel Torres-Espin, Austin Chou, J Russell Huie, Adam R Ferguson, Michael McCrea, Joseph Giacino, Shivshankar Sundaram, Amy J Markowitz, Geoffrey T Manley (2020). [arxiv.org/abs/2012.12310](https://arxiv.org/abs/2012.12310)
+
+* Nikos Kyritsis, Abel Torres-Espin, Patrick G Schupp, J Russell Huie, Austin Chou, Xuan Duong Fernandez, Leigh H Thomas, Rachel E Tsolinas, Debra D Hemmerle, Lisa U Pascual, Vineeta Singh, Jonathan Z Pan, Jason F Talbott, William D Whetstone, John F Burke, Anthony M DiGiorgio, Philip R Weinstein, Geoffrey T Manley, Sanjay S Dhall, Adam R Ferguson, Michael C Oldham, Jacqueline C Bresnahan, Michael S Beattie (2020). Blood RNA Profiles are Diagnostic for Severity in Human Acute Spinal Cord Injury. bioRxiv, [doi.org/10.1101/2020.04.15.037325](https://doi.org/10.1101/2020.04.15.037325)
+
+## Datasets
+
+* Torres-Espín A., Haefeli J., Ehsanian R., Torres D., Almeida C. A., Huie J., Chou A., Dirlikov B., Suen C. G., Nielson J. L., Kyritsis N., Duong-Fernandez X., Thomas L. H., Hemmerle D. D., Morozov D., Sanderson N., Talbott J. F., Manley G. T., Dhall S. S., Whetstone W. D., Bresnahan J. C., Beattie M. S., McKenna S. L., Pan J. Z., Ferguson A. R. (2021) ASIA Impairment Scale, level of injury, intraoperative time series mean arterial pressure and heart rate after spinal cord injury in patients in a multi-site retrospective TRACK-SCI cohort: site 2 of 2. Open Data Commons for Spinal Cord Injury. ODC-SCI:246 [dx.doi.org/10.34945/F5MG68](http://dx.doi.org/10.34945/F5MG68)
+
+* Torres-Espin A., Haefeli J., Ehsanian R., Torres D., Almeida C., Huie J., Chou A., Dirlikov B., Suen C. G., Nielson J. L., Kyritsis N., Duong-Fernandez X., Thomas L. H., Hemmerle D. D., Morozov D., Sanderson N., Talbott J., Manley G. T., Dhall S. S., Whetstone W. D., Bresnahan J. C., Beattie M. S., McKenna S. L., Pan J. Z., Ferguson A. R. (2021) ASIA Impairment Scale, level of injury, intraoperative time series mean arterial pressure and heart rate after spinal cord injury in patients in a multi-site retrospective TRACK-SCI cohort: site 1 of 2. Open Data Commons for Spinal Cord Injury. ODC-SCI:245 [dx.doi.org/10.34945/F5R59J](http://dx.doi.org/10.34945/F5R59J)
+
+* Schmidt, E., Torres-Espin, A., Raposo, P., Madsen, K., Kigerl, K., Popovich., P., Fenrich, K.F., Fouad, K. (2019) Data for Fecal Transplant Prevents Gut Dysbiosis and Anxiety-like Behaviour After Spinal Cord Injury in Rats. Open Data Commons for Spinal Cord Injury. ODC-SCI:262 [doi.org/10.7295/W97942VQ](http://doi.org/10.7295/W97942VQ)
+
+* Torres-Espín A, Hernández J, Navarro X (2013). Expression data from rat spinal cord injury and mesenchymal stromal cells (MSC) or olfactory ensheathing cells (OEC) transplantation. GEO: [GSE46988](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE46988)
+
+## Thesis
+
+* Abel Torres-Espín (2013). ‘Terapia celular para lesiones que afectan a la médula espinal’. English title: ‘Stem cell therapy for injuries affecting the spinal cord’. PhD thesis. Universitat Autònoma de Barcelona, Spain. (Spanish-English). ISBN: 9788449038150
+
+## Other
+
+* **Magazine Article**: Abel Torres-Espín (2014). ‘El trasplantament de cèl·lules mare podria ser beneficiós en lesions de medul·la espinal’. English title: ‘Stem cell transplant could be beneficious in spinal cord injury’. UAB divulga, Universitat Autònoma de Barcelona, Spain. (Catalan) https://ddd.uab.cat/record/116475

@@ -1,7 +1,7 @@
 ---
-title: "Abel Torres Espin"
+# title: "Live is a latent space"
 site: distill::distill_website
-image: "pic.jpg"
+image: "dataDRIVEN.jpg"
 color1: "#5A59A3"
 color2: "#C66060"
 links:
@@ -11,12 +11,17 @@ links:
     url: "https://twitter.com/AbelTorresEspi2"
   - label: GitHub
     url: "https://github.com/ATEspin"
-  - label: UCSF
-    url: "https://profiles.ucsf.edu/abel.torresespin"
-  - label: Email
+  - label: UCSF Email
     url: "mailto:abel.torresespin@ucsf.edu"
+  - label: Email
+    url: "mailto:espin@ualberta.ca"
 output:
   postcards::jolla
 ---
+At data DRIVEN we embrace data **Discovery** and advocate for **Reproducibility** through the use of **Informatics**, **Visualization** and data **Exploration** for **Neuroscience** research. 
 
-I am an assistant adjunct professor at the [Brain and Spinal Injury Center (BASIC)](https://brainandspinalinjury.org/), Department of Neurosurgery, at the University of California, San Francisco (UCSF). 
+We are academic data scientist aiming to increase the value of biomedical and neuroscience research through the application of data science and bioinformatics. We are interested in reproducibility, data reuse, data sharing, multidimensional analytics and applied machine learning. We perform computational studies that reuse data and we collaborate on biomedical research which requires the application of data science. We also contribute to building data sharing infrastructures and creating informatic tools.
+
+If you want to collaborate, reach out!
+
+<!-- an assistant adjunct professor at the [Brain and Spinal Injury Center (BASIC)](https://brainandspinalinjury.org/), Department of Neurosurgery, at the University of California, San Francisco (UCSF).  -->

@@ -1,0 +1,49 @@
+---
+title: "Co-authors"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Co-authors
+
+```{r echo=FALSE, message=FALSE, error=FALSE, warning=FALSE}
+library(easyPubMed)
+library(tidyverse)
+library(igraph)
+library(visNetwork)
+load('vis_g.Rda')
+```
+
+The nodes in the network represent researchers with whom I have published. Colors indicate the institution in which I was placed when I first published with each co-author.
+
+|  **UB:** Universitat de Barcelona, Barcelona, Spain
+|  **UAB:** Universitat Autonoma de Barcelona,Bellaterra del Valles, Sapin
+|  **UofA:** University of Alberta, Edmonton, Canada
+|  **UCSF:** University of California San Francisco, San Francisco, USA
+<br>
+
+|  **Try:**
+|      Zoom in with your mouse scroll function
+|      Hover over a node
+|      Grab a node and move it around
+|      Click on a node to see its connections
+<br>
+
+Created in R using [easyPubMed](https://cran.r-project.org/web/packages/easyPubMed/index.html), [tidyverse](https://www.tidyverse.org/), [igraph](https://igraph.org/redirect.html) and [visNetwork](https://datastorm-open.github.io/visNetwork/)
+
+
+[Learn how to make yours!](/post/network-coauthors/network.html)
+<br>
+```{r echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
+visNetwork(nodes = vis_g$nodes, edges = vis_g$edges, height = "700px", width = '900px')%>%
+  visNodes(size = 10, shape='cicle', mass=2,font=list(color='white'),fixed = F) %>%
+  visEdges(length = 10,physics = T, smooth = list(enabled=T))%>%
+  visLayout(randomSeed = 666)%>%
+  visOptions(highlightNearest = list(hover = T), 
+             nodesIdSelection = list(enabled = TRUE))%>%
+  visLegend()%>%
+  visPhysics(stabilization = T, minVelocity = 10, maxVelocity = 25)
+```
+<br>

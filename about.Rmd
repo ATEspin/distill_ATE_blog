@@ -1,11 +1,37 @@
 ---
-title: "About"
+title: "People"
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-I was born in Mataro, close to Barcelona, Spain. I studied biology at the Universitat de Barcelona from 2002 to 2007. In 2008 I started my PhD in the neuroscience program at the Universitat Autonoma de Barcelona under the supervision of Dr. Xavier Navarro, finishing my thesis entitled ‘Terapia celular para lesiones que afectan a la medula espinal’ (Cell therapy for injuries affecting the spinal cord). In 2014, I moved to Edmonton, Canada, for a postdoctoral position at the University of Alberta under the supervision of Dr. Karim Fouad. There I worked on the interaction between neuroinflammation and rehabilitative motor training after cervical spinal cord injury. Since November 2018, I have been working at the University of California San Francisco in a team led by Dr. Adam Ferguson, where we work on the application of data science to accelerate neurotrauma research and translation.
+# Data DRIVEN members
 
-When I am not doing research or coding, I am visiting mountains, climbing or catching up with friends.
+### Abel Torres Espín
+
+<img src="UCSFNS_190205_TorresEspin_Abel -10-Edit2.jpg"
+     alt="Abel Torres Espin"
+     style="float: left; margin-right: 10px; width:200px;" />
+
+**Research Associate, University of Alberta, Edmonton**
+**Assistant Adjunct Professor, University of California San Francisco**
+
+I was born in Mataro, a city close to Barcelona in Spain. I studied biology at the Universitat de Barcelona from 2002 to 2007. With interest in neuroscience, I began my PhD in 2008 at the Universitat Autonoma de Barcelona under the supervision of Dr. Xavier Navarro (check my thesis here). I moved to Canada in 2014 for a postdoctoral position at the University of Alberta in Edmonton under the supervision of Dr. Karim Fouad. Here, I worked on the interaction between neuroinflammation and rehabilitation after spinal cord injury. From November 2018 to 2020, I worked at the University of California San Francisco (UCSF) in a team led by Dr. Adam Ferguson, on the application of data science to accelerate neurotrauma research and translation. In 2020, I was hired at UCSF as an Assistant Adjunct Professor in the Department of Neurological Surgery. I currently hold a Research Associate position at the University of Alberta in Edmonton.
+
+# Collaborations
+
+* `Fouad Lab`: Karim Fouad team at University of Alberta
+* `Fenrich Lab`: Keith Fenrich at University of Alberta
+* `Human Movement Lab`: Juan Forero at University of Alberta
+* `Ferguson Lab`: Adam Ferguson team at University of California San Francisco
+* `Kyritsis Lab`: Nikos Kyritsis team at University of California San Francisco
+* `METRiCS group`: Jeannie Bailey, Ryan Halvorson and Robert Matthew at University of California San Francisco
+* `Elahi Lab`: Fanny Elahi team at University of California San Francisco
+* `TRACK-TBI study`: Transforming Research And Clinical Knowledge in TBI
+* `TRACK-SCI study`: Transforming Research And Clinical Knowledge in SCI at University of California San Francisco
+* `Udina group`: Esther Udina team at Universitat Autónoma de Bercelona
