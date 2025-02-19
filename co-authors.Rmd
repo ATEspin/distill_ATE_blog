@@ -3,47 +3,60 @@ title: "Co-authors"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 # Co-authors
 
 ```{r echo=FALSE, message=FALSE, error=FALSE, warning=FALSE}
-library(easyPubMed)
+# library(easyPubMed)
 library(tidyverse)
 library(igraph)
 library(visNetwork)
-load('vis_g.Rda')
+# load('vis_g.Rda')
+author_df<-readRDS("author_df.Rds")
 ```
 
-The nodes in the network represent researchers with whom I have published. Colors indicate the institution in which I was placed when I first published with each co-author.
+The nodes in the network represent researchers with whom we have published. Zoom in and navigate through the network!
 
-|  **UB:** Universitat de Barcelona, Barcelona, Spain
-|  **UAB:** Universitat Autonoma de Barcelona,Bellaterra del Valles, Sapin
-|  **UofA:** University of Alberta, Edmonton, Canada
-|  **UCSF:** University of California San Francisco, San Francisco, USA
-<br>
+```{r}
+author_df<-author_df[author_df$co_authors%in%author_df$author,]%>%
+  mutate(co_authors = ifelse(co_authors =="Torres Espin A", "Torres-Espin A", co_authors),
+         author = ifelse(author =="Torres Espin A", "Torres-Espin A", author))%>%
+  mutate(co_edge=paste(co_authors, author, sep = '_'))%>%
+  group_by(co_edge)%>%
+  summarise(count=n())%>%
+  separate(co_edge, c('co_authors','author'),sep = '_')
 
-|  **Try:**
-|      Zoom in with your mouse scroll function
-|      Hover over a node
-|      Grab a node and move it around
-|      Click on a node to see its connections
-<br>
+# co_author<-data.frame(name = unique(author_df$co_authors))
+
+author_df<-author_df%>%
+  group_by(co_authors, author)%>%
+  summarise(count = sum(count))
+```
+
+```{r}
+author_g<-graph_from_data_frame(author_df,directed = F)
+E(author_g)$weight<-author_df$count
+author_g<-simplify(author_g)
+V(author_g)$group<-rep("co-author", length(V(author_g)))
+V(author_g)$group[377]<-"Abel"
+# layout_nicely(author_g)
+# plot(author_g)
+```
+
+```{r, fig.height=8, fig.width=8}
+visIgraph(author_g)%>%
+      visIgraphLayout(layout = "layout_with_fr")%>%
+      visGroups()%>%
+      visEdges(width = "weight")%>%
+      visOptions(highlightNearest = list(enabled = T, hover = T), 
+                 nodesIdSelection = T, selectedBy = "group",
+                 height = "800px", width="100%")
+
+```
 
 Created in R using [easyPubMed](https://cran.r-project.org/web/packages/easyPubMed/index.html), [tidyverse](https://www.tidyverse.org/), [igraph](https://igraph.org/redirect.html) and [visNetwork](https://datastorm-open.github.io/visNetwork/)
 
 
 [Learn how to make yours!](/post/network-coauthors/network.html)
-<br>
-```{r echo=FALSE, message=FALSE, warning=FALSE, error=FALSE}
-visNetwork(nodes = vis_g$nodes, edges = vis_g$edges, height = "700px", width = '900px')%>%
-  visNodes(size = 10, shape='cicle', mass=2,font=list(color='white'),fixed = F) %>%
-  visEdges(length = 10,physics = T, smooth = list(enabled=T))%>%
-  visLayout(randomSeed = 666)%>%
-  visOptions(highlightNearest = list(hover = T), 
-             nodesIdSelection = list(enabled = TRUE))%>%
-  visLegend()%>%
-  visPhysics(stabilization = T, minVelocity = 10, maxVelocity = 25)
-```
-<br>

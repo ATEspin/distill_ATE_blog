@@ -1,11 +1,14 @@
 ---
 title: "Reproducing Schotter in R"
 description: |
-  A short description of the post.
+  Recreating Schotter by Georg Nees in R
 author:
   - name: Abel Torres Espin
     url: {}
 date: 2022-06-18
+categories:
+  - Creative coding
+  
 output:
   distill::distill_article:
     self_contained: false
@@ -213,7 +216,7 @@ We can now play!
 Schotter()
 ```
 
-```{r}
+```{r , preview=TRUE}
 Schotter(fill='firebrick', color='orange', nrow_s = 48, control_dis = 20)
 ```
 

@@ -1,24 +1,28 @@
 name: "distill_blog"
-title: "data(x){DRIVEN}"
+title: "health.data DRIVEN Lab"
 description: |
-  My Blog
+  Data DRIVEN Lab at University of Waterloo, By Abel Torres Espin
 output_dir: "_site"
 navbar:
   right:
     - text: "Home"
       href: index.html
-    - text: "Research"
-      href: research.html
+    - text: "Research and resources"
+      menu: 
+        - text: "Research"
+          href: research.html
+        - text: "Publications"
+          href: publications.html
+        - text: "Tools"
+          href: Tools.html
+        - text: "Pre-print and Data"
+          href: preprintData.html
     - text: "People"
-      href: about.html
-    - text: "Publications"
-      href: publications.html
-    - text: "Co-authors"
-      href: co-authors.html
-    - text: "Tools"
-      href: Tools.html
-    - text: "Pre-print and Data"
-      href: preprintData.html
+      menu: 
+        - text: "Lab members"
+          href: about.html
+        - text: "Co-authors"
+          href: co-authors.html
     - text: "Blog"
       href: blog.html
     - icon: fab fa-github
@@ -32,6 +36,10 @@ output:
       in_header:
       - header.html
 base_url: https://atespin.github.io/
+repository_url: https://github.com/ATEspin/distill_ATE_blog
+creative_commons: CC BY
+twitter:
+  site: "@AbelTorresEspi2"
 collections:
   posts:
     share: [twitter, linkedin]

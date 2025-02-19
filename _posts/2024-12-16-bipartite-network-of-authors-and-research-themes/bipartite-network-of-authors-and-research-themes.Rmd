@@ -1,0 +1,334 @@
+---
+title: "Bipartite network of authors and research topics"
+description: |
+  A short description of the post.
+author:
+  - name: Abel Torres Espin
+    url: {}
+date: 2024-12-16
+categories:
+  - Networks
+output:
+  distill::distill_article:
+    self_contained: false
+draft: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Libraries
+```{r, eval=FALSE}
+library(scholar) # For parsing Google scholar information from authors
+library(tidyverse)
+library(easyPubMed) # For querying PubMed
+library(pbapply)
+library(parallel)
+
+# dealing with text
+library(textclean)
+library(tm)
+library(SnowballC)
+
+# topic model
+library(tidytext)
+library(topicmodels)
+library(textmineR)
+
+# plotting
+library(factoextra)
+library(igraph)
+library(ggnetwork)
+```
+
+```{r, include=FALSE}
+library(tidyverse)
+library(igraph)
+library(ggnetwork)
+library(textmineR)
+```
+
+
+```{r, include=FALSE, eval=FALSE}
+raw_df<-read.csv("data.csv", na.strings = "") # load csv with data, 3 columns: names, research interest, google id
+colnames(raw_df)[1]<-"name" # correct name
+```
+
+# Extract authors and abstract information
+
+Starting with the list of papers
+```{r, eval=FALSE}
+g_id_df<-raw_df%>%
+  filter(!is.na(g_scholar))
+
+# API call to get publications ids for each author
+pubs<-lapply(g_id_df$g_scholar, get_publications)
+
+# Add names of the author to each df
+pubs_name<-lapply(1:length(pubs), function(i){
+  pubs[[i]]$name<-g_id_df$name[i]
+  pubs[[i]]$id<-g_id_df$g_scholar[i]
+  pubs[[i]]
+})
+
+# collaps to a single dataset and save in disk
+pubs_df<-bind_rows(pubs_name)
+saveRDS(pubs_df, file = "pubs_df.Rds")
+```
+
+Now we can extract the info per paper. The google schoolar URL connection was a very low time/frequency limit for making requests, so that makes impossible to extract all the information. But we can use the pubmed API.
+
+```{r, eval=FALSE}
+pubs_df_f<-pubs_df%>%
+  filter(year>=2013)
+
+cl<-makeCluster(14)
+parallel::clusterEvalQ(cl, expr = {
+  library(easyPubMed)
+})
+clusterExport(cl, varlist = "pubs_df_f")
+
+pubmed_data<-pblapply(1:nrow(pubs_df_f), function(i){
+  pubmed_ids<-get_pubmed_ids_by_fulltitle(pubs_df_f$title[i])
+  if(pubmed_ids$Count==0){
+    return(NA)
+  }else{
+    fetch_pubmed_data(pubmed_ids, format = "medline" ) 
+  }
+}, cl = cl)
+
+saveRDS(pubmed_data, "pubmed_data.Rds")
+```
+
+## Process the abstracts
+```{r, eval=FALSE}
+extract_abs<-function(x){
+
+  if (is.na(x)) return (NA)
+  
+  start<-which(str_detect(x, "^AB  -"))
+  
+  if (length(start) == 0){
+    return(NA)
+  }
+  
+  count = start + 1
+  while( TRUE ){
+    if (str_detect(x[count], "^ ")){
+      count = count +1
+    }else{
+      break()
+    }
+  }
+  
+  abstract<-paste0(x[start:(count-1)],collapse = "")
+  abstract<-str_remove(abstract,"^AB  -")
+  
+  return(abstract)
+}
+
+# abstracts_l<-list()
+pubs_df_f$clean_abs<-NA
+
+for (a in 1:length(pubmed_data)){
+  cat("\r", a)
+  pubs_df_f$clean_abs[a]<-extract_abs(pubmed_data[[a]])
+}
+```
+
+```{r, eval = FALSE}
+# Function for cleaning
+clean_text<- function(t){
+  t <- as.character(t)
+  
+  t <- t %>%
+    str_to_lower() %>%  # convert all the string to low alphabet
+    replace_contraction() %>% # replace contraction to their multi-word forms
+    replace_internet_slang() %>% # replace internet slang to normal words
+    replace_word_elongation() %>% # replace informal writing with known semantic replacements
+    replace_number(remove = T) %>% # remove number
+    replace_date(replacement = "") %>% # remove date
+    replace_time(replacement = "") %>% # remove time
+    str_remove_all(pattern = "[[:punct:]]") %>% # remove punctuation
+    str_squish() %>% # reduces repeated whitespace inside a string.
+    str_trim() # removes whitespace from start and end of string
+  
+  return(as.data.frame(t))
+}
+
+pubs_df_f$clean_abs<-clean_text(pubs_df_f$clean_abs)$t
+pubs_df_f$clean_title<-clean_text(pubs_df_f$title)$t
+
+saveRDS(pubs_df_f, "pubs_df_f.Rds")
+```
+
+Adding my abstracts
+```{r, eval = FALSE}
+ATE_pubs_ids<-get_pubmed_ids("abel torres espin")
+ATE_pubmed_data<-fetch_pubmed_data(ATE_pubs_ids, format = "medline")
+
+# get PMIDs
+starts<-which(str_detect(ATE_pubmed_data, "^PMID"))
+pmid<-ATE_pubmed_data[starts]
+
+#extract papers
+starts<-c(starts, length(ATE_pubmed_data))
+ATE_pubmed_data_list<-list()
+for(i in 1:(length(starts)-1)){
+  ATE_pubmed_data_list[[i]]<-ATE_pubmed_data[starts[i]:(starts[i+1]-1)]
+}
+
+pubmed_data<-readRDS("pubmed_data.Rds")
+pubmed_data<-append(pubmed_data,ATE_pubmed_data_list)
+
+# Save again with the addition of my abstracts
+saveRDS(pubmed_data, "pubmed_data.Rds")
+```
+
+Adding my information on the pub_df_f
+```{r, eval=FALSE}
+pubs_df_f<-readRDS("pubs_df_f.Rds")
+ATE_pub_df<-data.frame(name = "Abel Torres Espin", 
+                       clean_abs = unlist(lapply(ATE_pubmed_data_list, extract_abs)),
+                       pubid = pmid)
+ATE_pub_df$clean_abs<-clean_text(ATE_pub_df$clean_abs)$t
+
+pubs_df_f<-bind_rows(pubs_df_f, ATE_pub_df)
+```
+
+# Text clustering
+```{r, eval=FALSE}
+pubs_df_clustering<-pubs_df_f%>%
+  filter(!str_detect(clean_abs, "this corrects the article")|is.na(clean_abs))
+
+pubs_df_clustering<-pubs_df_clustering%>%
+  mutate(clean_abs2 = ifelse(is.na(clean_abs), clean_text(title)$t, clean_abs),
+         clean_abs2 = removeWords(clean_abs2, c("health","care", 
+                                     "use","studi", "data", "associ", "result",
+                                     "research")))
+  
+pubs_df_clustering<-pubs_df_clustering%>%
+  filter(!str_detect(clean_abs2, " des | de | la "))
+
+# create document term matrix (tokens)
+set.seed(55)
+dtm_clean_abs<-CreateDtm(pubs_df_clustering$clean_abs2,pubs_df_clustering$pubid, 
+                    ngram_window = c(1,1), 
+                    stopword_vec = stopwords("en"),  
+                    verbose = F,
+                    stem_lemma_function = function(x) 
+                      SnowballC::wordStem(x, "en"))
+
+## Save so that this doesn't need to run every time
+saveRDS(dtm_clean_abs, "dtm_clean_abs.Rds")
+```
+
+```{r}
+dtm_clean_abs<-readRDS("dtm_clean_abs.Rds")
+
+tf_mat <- TermDocFreq(dtm_clean_abs)
+## filter for tokens in more than one document
+tf_mat_f<-tf_mat%>%
+  filter(doc_freq>1 & doc_freq<663)%>%
+  filter(!term%in%c("n", "p", "patient", "â", "factor", "increas", "use", "intervent",
+                    "studi", "result", ""))
+
+# TF-IDF and cosine similarity
+tfidf <- t(dtm_clean_abs[ , tf_mat_f$term ]) * tf_mat_f$idf
+tfidf <- t(tfidf)
+```
+
+```{r}
+csim <- tfidf / sqrt(rowSums(tfidf * tfidf))
+csim <- csim %*% t(csim)
+
+cdist <- as.dist(1 - csim)
+
+cdist[is.na(cdist)]<-1
+
+hc <- hclust(cdist, method = "ward.D2")
+plot(hc, labels = FALSE, hang = -1)
+
+cdist_mds<-cmdscale(cdist, eig = T, k = 2)
+plot(cdist_mds$eig[1:100])
+plot(cdist_mds$points, col = cutree(hc, 10))
+```
+
+## Explain clusters
+```{r}
+tfidf_df<-as.data.frame(as.matrix(tfidf))
+tfidf_df$clust<-cutree(hc, 60)
+
+tfidf_df_sum<-tfidf_df%>%
+  group_by(clust)%>%
+  summarise(across(everything(), \(x) mean(x,na.rm = TRUE)))%>%
+  pivot_longer(cols = -clust)
+  
+tfidf_df_sum_f<-tfidf_df_sum%>%
+  group_by(clust)%>%
+  slice_max(value, n = 5)%>%
+  filter(value>0)
+
+tfidf_df_sum_f %>%
+  mutate(name = reorder_within(name, value, clust)) %>%
+  ggplot(aes(value, name, fill = factor(clust))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ clust, scales = "free") +
+  scale_y_reordered()
+
+#write.csv(tfidf_df_sum_f, "tfidf_df_sum_f2.csv")
+```
+
+## Graphs
+```{r, preview = TRUE}
+
+cluster_names<-read.csv("tfidf_df_sum_f2.csv", na.strings = "")%>%
+  mutate(clust_level2 = ifelse(is.na(clust_level2), clust_name, clust_level2))%>%
+  group_by(clust)%>%
+  summarise(clust_name = unique(clust_name),
+            clust_level2 = unique(clust_level2))
+  
+pubs_df_clustering$clust <- cutree(hc, 60)
+pubs_df_clustering2<-pubs_df_clustering%>%
+  left_join(cluster_names%>%
+              select(clust, clust_level2))%>%
+  filter(!is.na(clust_level2))
+
+pubs_df_clustering2$name<-str_trim(pubs_df_clustering2$name)
+net_df<-pubs_df_clustering2%>%
+  select(name, clust_level2)
+
+g<-graph_from_data_frame(net_df, directed = F)
+bipartite.mapping(g)
+
+V(g)$type <- bipartite_mapping(g)$type 
+V(g)$size <- degree(g)
+g<-simplify(g)
+
+gg_net<-ggnetwork(g, layout = igraph::layout.fruchterman.reingold(g))
+
+gg_net<-gg_net%>%
+  mutate(type2 = case_when(
+    name == "Abel Torres Espin"~"me",
+    type == FALSE~"name",
+    type == TRUE~"cluster"
+  ),
+  size2 = ifelse(type == FALSE, 1, 1.1),
+  line_size = ifelse(type2 == "me", 0.15, 0.1))
+
+ggplot(gg_net, aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_edges(aes(color = type2), alpha=0.4, 
+             curvature = 0.1) +
+  geom_nodes(aes(color = type2, shape = type2))+
+  geom_nodelabel_repel(aes(label = name, fill = type2), 
+                       show.legend = F, force = 0.02)+
+  scale_color_manual(values = c("grey","green3", "grey"))+
+  scale_fill_manual(values = c("lightpink2", "green3", "steelblue1"))+
+  theme_blank()
+```
+
+
+
+

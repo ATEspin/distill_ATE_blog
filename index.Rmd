@@ -1,7 +1,7 @@
 ---
 # title: "Live is a latent space"
 site: distill::distill_website
-image: "dataDRIVEN.jpg"
+image: "img/HDD_Lab_black.png"
 color1: "#5A59A3"
 color2: "#C66060"
 links:
@@ -11,17 +11,24 @@ links:
     url: "https://twitter.com/AbelTorresEspi2"
   - label: GitHub
     url: "https://github.com/ATEspin"
-  - label: UCSF Email
-    url: "mailto:abel.torresespin@ucsf.edu"
-  - label: Email
-    url: "mailto:espin@ualberta.ca"
+  - label: UW Email
+    url: "mailto:abel.torresespin@uwaterloo.edu"
+
 output:
   postcards::jolla
 ---
-At data DRIVEN we embrace data **Discovery** and advocate for **Reproducibility** through the use of **Informatics**, **Visualization** and data **Exploration** for **Neuroscience** research. 
 
-We are academic data scientist aiming to increase the value of biomedical and neuroscience research through the application of data science and bioinformatics. We are interested in reproducibility, data reuse, data sharing, multidimensional analytics and applied machine learning. We perform computational studies that reuse data and we collaborate on biomedical research which requires the application of data science. We also contribute to building data sharing infrastructures and creating informatic tools.
+<!-- <div id="particles-js"></div> -->
+<!-- <script src="js/particles.js"></script> -->
+<!-- <script src="js/app.js"></script> -->
+
+*"Life is a causal latent space"*
+
+At health.data DRIVEN Lab we apply data-driven approaches for health and biomedical data **Discovery** and  **Research** through the use of **Informatics**, **Visualization**, data **Exploration**, and **Networks**. 
+
+We are academic data scientist aiming to increase the value of health data and biomedical research through the application of data science methods and informatics. We are interested in the conceptualization and computational modeling of health and disease as complex systems, systems thinking in health, precision health, the reuse of data to gain insights, multidimensional analytics, applied health data science, and research reproducibility and data sharing.
 
 If you want to collaborate, reach out!
 
-<!-- an assistant adjunct professor at the [Brain and Spinal Injury Center (BASIC)](https://brainandspinalinjury.org/), Department of Neurosurgery, at the University of California, San Francisco (UCSF).  -->
+**School of Public Health Sciences**, **Faculty of Health**, **University of Waterloo**
+

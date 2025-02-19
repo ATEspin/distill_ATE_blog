@@ -1,5 +1,11 @@
 ---
 title: "Publications"
+editor_options: 
+  chunk_output_type: console
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
@@ -18,110 +24,129 @@ library(htmltools)
 my_entrez_id <- get_pubmed_ids('Abel Torres-Espin')
 
 ## This fetches the pubmed info for each paper returned as list of string character vector
-track_txt <- fetch_pubmed_data(my_entrez_id, format = "medline")
+track_txt <- fetch_pubmed_data(my_entrez_id)
+pub_df<-table_articles_byAuth(track_txt)
 
-## Creates an index of where the papers start in the track_txt string
-paper_list_index<-c(which(track_txt==""),length(track_txt))
+pub_df_s<-pub_df%>%
+  mutate(author = paste(firstname, lastname))%>%
+  group_by(title)%>%
+  summarise(authors = paste(author, collapse = "; "),
+            doi = unique(doi),
+            journal = unique(journal),
+            year = unique(year),
+            month = unique(month),
+            day = unique(day))
 
-## Extract papers by list
-paper_list<-list()
-for(i in 1:(length(paper_list_index)-1)){
-  paper_list[[i]]<-track_txt[seq(paper_list_index[i],paper_list_index[i+1]-1)]
-}
-
-## List of PMIDs using the PMID tag
-PMC_list<-track_txt[str_detect(track_txt, "^PMID- ")]
-PMC_list<-unique(str_remove_all(PMC_list, '^PMID- '))
-
-### build the dataframe
-extract<-list()
-for (p in 1:length(paper_list)){
-  i<-paper_list[[p]]
-  ## Author names
-  author_names<-i[str_detect(i, "^AU ")]
-  author_names<-paste0(str_remove_all(author_names, "^AU  - "), collapse="; ")
-  
-  ## PMIDs
-  PMID<-i[str_detect(i, "^PMID- ")]
-  PMID<-str_remove_all(PMID, '^PMID- ')
-  
-  ## Date publication
-  date_p<-i[str_detect(i, "^DP ")]
-  date_p<-str_remove_all(date_p, '^DP  - ')
-  
-  ## year
-  year<-str_extract(date_p,"[[:digit:]]+")
-  
-  
-  ## Title
-  title<-i[str_detect(i, "^TI ")]
-  title<-str_remove_all(title, '^TI  - ')
-  
-  ## Publication info
-  pub_info<-i[str_detect(i, "^SO ")]
-  pub_info<-str_remove_all(pub_info, '^SO  - ')
-  
-  ## DOI
-  lid<-i[str_detect(i, "^LID ")]
-  lid<-str_remove_all(lid, '^LID - ')
-  
-  if (length(lid)>0){
-    if (str_detect(lid, "doi")){
-      lid<-str_remove_all(lid, ' .+')
-      lid<-paste0("https://doi.org/", lid)
-    }else{
-      lid<-NULL
-    }
-  }else{
-    lid<-NULL
-  }
-  
-  ##link
-  link<-paste0("https://pubmed.ncbi.nlm.nih.gov/", PMID)
-  
-  title<-htmltools::renderTags(tags$a(href = link,title,target="_blank"))$html
-  
-  
-  ## join all info in dataframe
-  extract[[p]]<-data.frame("Year" = ifelse(is_empty(year), "No year", year),
-                           "Title" = ifelse(is_empty(title), "No title", title), 
-                           "Authors" = ifelse(is_empty(author_names), 
-                                              "No names", author_names), 
-                           "Info" = ifelse(is_empty(pub_info), "No info", pub_info), 
-                           "PMID" = ifelse(is_empty(PMID), "No PMID", PMID),
-                           "DOI" = ifelse(is_empty(lid), "No DOI", lid))
-}
+# ## Creates an index of where the papers start in the track_txt string
+# paper_list_index<-c(which(track_txt==""),length(track_txt))
+# 
+# ## Extract papers by list
+# paper_list<-list()
+# for(i in 1:(length(paper_list_index)-1)){
+#   paper_list[[i]]<-track_txt[seq(paper_list_index[i],paper_list_index[i+1]-1)]
+# }
+# 
+# ## List of PMIDs using the PMID tag
+# PMC_list<-track_txt[str_detect(track_txt, "^PMID- ")]
+# PMC_list<-unique(str_remove_all(PMC_list, '^PMID- '))
+# 
+# ### build the dataframe
+# extract<-list()
+# for (p in 1:length(paper_list)){
+#   i<-paper_list[[p]]
+#   ## Author names
+#   author_names<-i[str_detect(i, "^AU ")]
+#   author_names<-paste0(str_remove_all(author_names, "^AU  - "), collapse="; ")
+#   
+#   ## PMIDs
+#   PMID<-i[str_detect(i, "^PMID- ")]
+#   PMID<-str_remove_all(PMID, '^PMID- ')
+#   
+#   ## Date publication
+#   date_p<-i[str_detect(i, "^DP ")]
+#   date_p<-str_remove_all(date_p, '^DP  - ')
+#   
+#   ## year
+#   year<-str_extract(date_p,"[[:digit:]]+")
+#   
+#   
+#   ## Title
+#   title<-i[str_detect(i, "^TI ")]
+#   title<-str_remove_all(title, '^TI  - ')
+#   
+#   ## Publication info
+#   pub_info<-i[str_detect(i, "^SO ")]
+#   pub_info<-str_remove_all(pub_info, '^SO  - ')
+#   
+#   ## DOI
+#   lid<-i[str_detect(i, "^LID ")]
+#   lid<-str_remove_all(lid, '^LID - ')
+#   
+#   if (length(lid)>0){
+#     if (any(str_detect(lid, "doi"))){
+#       lid<-str_remove_all(lid[which(str_detect(lid, "doi"))], ' .+')
+#       lid<-paste0("https://doi.org/", lid)
+#     }else{
+#       lid<-NULL
+#     }
+#   }else{
+#     lid<-NULL
+#   }
+#   
+#   ##link
+#   link<-paste0("https://pubmed.ncbi.nlm.nih.gov/", PMID)
+#   
+#   title<-htmltools::renderTags(tags$a(href = link,title,target="_blank"))$html
+#   
+#   
+#   ## join all info in dataframe
+#   extract[[p]]<-data.frame("Year" = ifelse(is_empty(year), "No year", year),
+#                            "Title" = ifelse(is_empty(title), "No title", title), 
+#                            "Authors" = ifelse(is_empty(author_names), 
+#                                               "No names", author_names), 
+#                            "Info" = ifelse(is_empty(pub_info), "No info", pub_info), 
+#                            "PMID" = ifelse(is_empty(PMID), "No PMID", PMID),
+#                            "DOI" = ifelse(is_empty(lid), "No DOI", lid))
+# }
 
 ## Create the dataframe
-pub_df<-do.call(rbind, extract)
-pub_df<-pub_df%>%arrange(desc(Year))
+# pub_df<-do.call(rbind, extract)
+pub_df_s<-pub_df_s%>%arrange(desc(year), desc(month), desc(day))
 # pub_df$Link<-paste0("https://pubmed.ncbi.nlm.nih.gov/", pub_df$PMID)
 
 ```
 
 [Google Scholar](https://scholar.google.ca/citations?user=c7vjfOUAAAAJ&hl=en)
 
-```{r eval=TRUE}
-pub_df<-pub_df%>%select(-DOI, -PMID)
-datatable(pub_df, rownames = NULL, escape = c(TRUE, FALSE, TRUE))
-```
+<!-- ```{r eval=FALSE} -->
+<!-- pub_df<-pub_df%>%select(-DOI, -PMID) -->
 
-```{r eval=FALSE}
+<!--   # mutate(Authors = as.character(Authors)) %>%  -->
+<!--   # rowwise() %>%  -->
+<!--   # mutate(Authors = case_when(nchar(Authors) > 30 ~ -->
+<!--   #       paste(str_sub(Authors, 1, 30), "..."), -->
+<!--   #       nchar(Authors) <= 30 ~ Authors)) -->
+
+<!-- datatable(pub_df, rownames = NULL, escape = c(TRUE, FALSE, TRUE),  -->
+<!--           width = 1000, -->
+<!--           options = list( -->
+<!--             autoWidth = FALSE, -->
+<!--             columnsDefs = list(list(width = "100px", targets = "_all")) -->
+<!-- )) -->
+<!-- ``` -->
+
+```{r eval=TRUE}
 year_list<-list()
-years<-sort(unique(pub_df$Year), decreasing = T)
+years<-sort(unique(pub_df_s$year), decreasing = T)
 for (i in 1:length(years)){
   year<-years[i]
-  temp_df<-pub_df[pub_df$Year==year,]
+  temp_df<-pub_df_s[pub_df_s$year==year,]
   ## papers per year
   temp_tags<-apply(temp_df, 1, function(x){
               list(
                 tags$h4(
-                (if (!is.na(x[5])) {
-                    tags$a(href = x[6],x[2],target="_blank")
-                }else{
-                    tags$a(x[2],target="_blank")
-                })),
-                tags$p(x[3],x[4])
+                  tags$a(href = paste0("https://doi.org/", x[3]),x[1], target = "_blank")),
+                tags$p(HTML(x[2]),". ", tags$i(x[4]))
               )
            })
   
